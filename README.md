@@ -1,13 +1,18 @@
-# Tutorial 9 - Backend for Frontends (BFFs)
+# Entrega 5
 
-Repositorio con código base para la implementación de un Backend for Frontend (BFF) usando GraphQL como lenguaje de consulta.
+Repositorio con código base para la implementación de 3 microservicios comunicandose por medio de comandos y eventos, se creo Backend for Frontend (BFF) usando GraphQL como lenguaje de creacion de comandos y consultas hacia aplicacion flask alpesonline quien a su vez hacer de saga con orquestacion para manejo de atomicidad en una transaccion entre los 3 microservicios desarrollados.
 
-Este repositorio está basado en el repositorio de Sagas visto en el tutorial 8 del curso. Por tal motivo, puede usar ese mismo repositorio para entender algunos detalles que este README no cubre.
 
 ## Estructura del proyecto
 
-Este repositorio sigue en general la misma estructura del repositorio de origen. Sin embargo, cuenta con unos ligeros cambios en especial en la estructura del módulo `ui` y el nuevo servicio `bff`:
+Este repositorio tiene la siguiente estructura:
 
+- El directorio src/integracion_logistica/ ahora incluye todas las clases y archivos que constituyen el contexto con la integración con logistica.
+- El directorio src/inventario/ ahora incluye todas las clases y archivos que constituyen el contexto de inventario.
+- El proyecto alpesonline ahora cuenta con un nuevo módulo para el manejo de sagas src/alpesonline/modulos/sagas/.
+- Módulo aplicacion que cuenta con código de los comandos para múltiples contextos fuera del de ordenes.
+- Módulo coordinadores que cuenta con la saga de ordenes usando orquestación.
+- Los archivos src/alpesonline/seedwork/aplicacion/sagas.py provee las interfaces y definiciones genéricas para la coordinación de sagas.
 - El directorio **src/bff_web/** incluye el código del BFF Web. Este servicio cuenta con la siguiente estructura:
     - **consumidores**: Código con la lógica para leer y procesar eventos del broker de eventos.
     - **despachadores**: Código con la lógica para publicar comandos al broker de eventos.
@@ -15,7 +20,7 @@ Este repositorio sigue en general la misma estructura del repositorio de origen.
     - **api**: Módulo con la diferentes versiones del API, routers, esquemas, mutaciones y consultas.
 - El directorio **src/ui/** cuenta ahora solo con código HTML, estilos CSS y JS. 
 
-## AeroAlpes
+## AlpesOnline
 ### Ejecutar Base de datos
 Desde el directorio principal ejecute el siguiente comando.
 
@@ -30,13 +35,13 @@ Este comando descarga las imágenes e instala las dependencias de la base datos.
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-flask --app src/aeroalpes/api run
+flask --app src/alpesonline/api run
 ```
 
 Siempre puede ejecutarlo en modo DEBUG:
 
 ```bash
-flask --app src/aeroalpes/api --debug run
+flask --app src/alpesonline/api --debug run
 ```
 
 ### Ejecutar pruebas
@@ -55,7 +60,7 @@ coverage report
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-docker build . -f aeroalpes.Dockerfile -t aeroalpes/flask
+docker build . -f alpesonline.Dockerfile -t alpesonline/flask
 ```
 
 ### Ejecutar contenedora (sin compose)
@@ -63,34 +68,7 @@ docker build . -f aeroalpes.Dockerfile -t aeroalpes/flask
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-docker run -p 5000:5000 aeroalpes/flask
-```
-
-## Sidecar/Adaptador
-### Instalar librerías
-
-En el mundo real es probable que ambos proyectos estén en repositorios separados, pero por motivos pedagógicos y de simpleza, 
-estamos dejando ambos proyectos en un mismo repositorio. Sin embargo, usted puede encontrar un archivo `sidecar-requirements.txt`, 
-el cual puede usar para instalar las dependencias de Python para el servidor y cliente gRPC.
-
-```bash
-pip install -r sidecar-requirements.txt
-```
-
-### Ejecutar Servidor
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-python src/sidecar/main.py 
-```
-
-### Ejecutar Cliente
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-python src/sidecar/cliente.py 
+docker run -p 5000:5000 alpesonline/flask
 ```
 
 ### Compilación gRPC
@@ -98,7 +76,7 @@ python src/sidecar/cliente.py
 Desde el directorio `src/sidecar` ejecute el siguiente comando.
 
 ```bash
-python -m grpc_tools.protoc -Iprotos --python_out=./pb2py --pyi_out=./pb2py --grpc_python_out=./pb2py protos/vuelos.proto
+python -m grpc_tools.protoc -Iprotos --python_out=./pb2py --pyi_out=./pb2py --grpc_python_out=./pb2py protos/ordenes.proto
 ```
 
 ### Crear imagen Docker
@@ -106,7 +84,7 @@ python -m grpc_tools.protoc -Iprotos --python_out=./pb2py --pyi_out=./pb2py --gr
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-docker build . -f adaptador.Dockerfile -t aeroalpes/adaptador
+docker build . -f adaptador.Dockerfile -t alpesonline/adaptador
 ```
 
 ### Ejecutar contenedora (sin compose)
@@ -114,56 +92,23 @@ docker build . -f adaptador.Dockerfile -t aeroalpes/adaptador
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-docker run -p 50051:50051 aeroalpes/adaptador
+docker run -p 50051:50051 alpesonline/adaptador
 ```
 
-## Microservicio Notificaciones
-### Ejecutar Aplicación
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-python src/notificaciones/main.py
-```
-
-### Crear imagen Docker
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-docker build . -f notificacion.Dockerfile -t aeroalpes/notificacion
-```
-
-### Ejecutar contenedora (sin compose)
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-docker run aeroalpes/notificacion
-```
-
-## Microservicio: Clientes
+## Microservicio: Inventario
 
 Desde el directorio `src` ejecute el siguiente comando
 
 ```bash
-uvicorn cliente.main:app --host localhost --port 8000 --reload
+uvicorn inventario.main:app --host localhost --port 8001 --reload
 ```
 
-## Microservicio: Pagos
+## Microservicio: Integración Logistica
 
 Desde el directorio `src` ejecute el siguiente comando
 
 ```bash
-uvicorn pagos.main:app --host localhost --port 8001 --reload
-```
-
-## Microservicio: Integración GDS
-
-Desde el directorio `src` ejecute el siguiente comando
-
-```bash
-uvicorn integracion_gds.main:app --host localhost --port 8002 --reload
+uvicorn integracion_Logistica.main:app --host localhost --port 8002 --reload
 ```
 
 ## BFF: Web
@@ -174,12 +119,20 @@ Desde el directorio `src` ejecute el siguiente comando
 uvicorn bff_web.main:app --host localhost --port 8003 --reload
 ```
 
+url para consumo desde navegador:
+
+POST
+http://lbn-dermo-app-web-84168d11e474aa03.elb.us-east-1.amazonaws.com:3000/order
+
+GET
+http://lbn-dermo-app-web-84168d11e474aa03.elb.us-east-1.amazonaws.com:3000/orders
+
 ### Crear imagen Docker
 
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-docker build . -f ui.Dockerfile -t aeroalpes/bff
+docker build . -f ui.Dockerfile -t alpesonline/bff
 ```
 
 ### Ejecutar contenedora (sin compose)
@@ -187,7 +140,7 @@ docker build . -f ui.Dockerfile -t aeroalpes/bff
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-docker run aeroalpes/bff
+docker run alpesonline/bff
 ```
 
 ## CDC & Debezium
@@ -223,7 +176,7 @@ docker exec -it broker bash
 Ya dentro de la contenedora ejecute:
 
 ```bash
-./bin/pulsar-client consume -s "sub-datos" public/default/aeroalpesdb.reservas.usuarios_legado -n 0
+./bin/pulsar-client consume -s "sub-datos" public/default/alpesonlinedb.ordenes.usuarios_legado -n 0
 ```
 
 ### Consultar tópicos
@@ -328,5 +281,5 @@ fuser -k <puerto>/tcp
 
 ### Correr docker-compose usando profiles
 ```bash
-docker-compose --profile <pulsar|aeroalpes|ui|notificacion> up
+docker-compose --profile <pulsar|alpesonline|ui|notificacion> up
 ```

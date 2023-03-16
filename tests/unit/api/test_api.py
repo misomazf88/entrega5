@@ -4,9 +4,9 @@ import tempfile
 import pytest
 import json
 
-from aeroalpes.api import create_app, importar_modelos_alchemy
-from aeroalpes.config.db import init_db
-from aeroalpes.config.db import db
+from alpesonline.api import create_app, importar_modelos_alchemy
+from alpesonline.config.db import init_db
+from alpesonline.config.db import db
 
 @pytest.fixture
 def app():
@@ -20,7 +20,7 @@ def app():
     with app.app_context():
         init_db(app)
 
-        from aeroalpes.config.db import db
+        from alpesonline.config.db import db
 
         importar_modelos_alchemy()
         db.create_all()
@@ -56,7 +56,7 @@ def test_servidor_levanta(client):
     assert response['status'] == 'up'
 
 
-def reserva_correcta():
+def orden_correcta():
     return {
     "itinerarios": [
         {
@@ -101,6 +101,6 @@ def reserva_correcta():
     ]
 }
 
-def test_reservar_vuelo(client):
-    rv = client.post('/vuelos/reserva', data=json.dumps(reserva_correcta()), content_type='application/json')
+def test_crear_orden(client):
+    rv = client.post('/orden/crear', data=json.dumps(orden_correcta()), content_type='application/json')
     assert rv is not None
