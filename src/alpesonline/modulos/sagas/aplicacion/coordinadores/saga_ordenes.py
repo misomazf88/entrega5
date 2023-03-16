@@ -16,7 +16,7 @@ class CoordinadorOrdenes(CoordinadorOrquestacion):
 
     def inicializar_pasos(self):
         self.pasos = [
-            Inicio(index=0, comando=CrearOrden, evento=OrdenCreada, error=CreacionOrdenFallida, compensacion=CancelarOrden),
+            Transaccion(index=0, comando=CrearOrden, evento=OrdenCreada, error=CreacionOrdenFallida, compensacion=CancelarOrden),
             Transaccion(index=1, comando=PagarOrden, evento=OrdenPagada, error=OrdenFallida, compensacion=RevertirPago),
             Transaccion(index=2, comando=ConfirmarOrden, evento=OrdenLogisticaConfirmada, error=ConfirmacionFallida, compensacion=ConfirmacionLogisticaRevertida),
             Transaccion(index=3, comando=AprobarOrden, evento=OrdenAprobada, error=AprobacionOrdenFallida, compensacion=CancelarOrden),

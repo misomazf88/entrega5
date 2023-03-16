@@ -11,12 +11,18 @@ from .esquemas import *
 class Mutation:
 
     @strawberry.mutation
-    async def crear_orden(self, id_usuario: str, id_correlacion: str, info: Info) -> OrdenRespuesta:
+    async def crear_orden(self, id_usuario: str, id_correlacion: str, id_vendedor: str,id_entrega: str,total: str,status: str,info: Info) -> OrdenRespuesta:
         print(f"ID Usuario: {id_usuario}, ID Correlación: {id_correlacion}")
         payload = dict(
             id_usuario = id_usuario,
             id_correlacion = id_correlacion,
-            fecha_creacion = utils.time_millis()
+            fecha_creacion = utils.time_millis(),
+            fecha_actualizacion=utils.time_millis(),
+            id_vendedor=id_vendedor,
+            id_entrega=id_entrega,
+            fecha_entrega=utils.time_millis(),
+            total=total,
+            status=status
         )
         comando = dict(
             id = str(uuid.uuid4()),

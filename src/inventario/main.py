@@ -36,11 +36,11 @@ tasks = list()
 async def app_startup():
     global tasks
     task1 = asyncio.ensure_future(suscribirse_a_topico("evento-pago", "sub-pagos", EventoPago))
-    #task2 = asyncio.ensure_future(suscribirse_a_topico("comando-pagar-orden", "sub-com-pagos-ordenr", ComandoPagarOrden))
-    #task3 = asyncio.ensure_future(suscribirse_a_topico("comando-revertir-pago", "sub-com-pagos-revertir", ComandoRevertirPago))
+    task2 = asyncio.ensure_future(suscribirse_a_topico("comando-pagar-orden", "sub-com-pagos-orden", ComandoPagarOrden))
+    task3 = asyncio.ensure_future(suscribirse_a_topico("comando-revertir-pago", "sub-com-pagos-revertir", ComandoRevertirPago))
     tasks.append(task1)
-    #tasks.append(task2)
-    #tasks.append(task3)
+    tasks.append(task2)
+    tasks.append(task3)
 
 @app.on_event("shutdown")
 def shutdown_event():

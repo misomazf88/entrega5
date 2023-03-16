@@ -20,7 +20,12 @@ def obtener_Ordenes(root) -> typing.List["Orden"]:
                 fecha_creacion=datetime.strptime(orden.get('fecha_creacion'), FORMATO_FECHA), 
                 fecha_actualizacion=datetime.strptime(orden.get('fecha_actualizacion'), FORMATO_FECHA), 
                 id=orden.get('id'), 
-                id_usuario=orden.get('id_usuario', '')
+                id_usuario=orden.get('id_usuario'),
+                id_vendedor=orden.get('id_vendedor'),
+                id_entrega=orden.get('id_entrega'),
+                fecha_entrega=orden.get('fecha_entrega'),
+                total=orden.get('total'),
+                status=orden.get('status')
             )
         )
 
@@ -35,6 +40,11 @@ class Itinerario:
 class Orden:
     id: str
     id_usuario: str
+    id_vendedor: str
+    id_entrega: str
+    fecha_entrega: str
+    total: str
+    status: str
     fecha_creacion: datetime
     fecha_actualizacion: datetime
     #itinerarios: typing.List[Itinerario]

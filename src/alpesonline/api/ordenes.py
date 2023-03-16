@@ -27,11 +27,9 @@ def crear_orden_usando_comando():
         map_orden = MapeadorOrdenDTOJson()
         orden_dto = map_orden.externo_a_dto(orden_dict)
 
-        comando = CrearOrden(orden_dto.fecha_creacion, orden_dto.fecha_actualizacion, orden_dto.id, orden_dto.itinerarios)
+        comando = CrearOrden(orden_dto.fecha_creacion, orden_dto.fecha_actualizacion, orden_dto.id, orden_dto.itinerarios, orden_dto.id_cliente)
         CoordinadorOrquestacion.inicializar_pasos()
         
-        # TODO Reemplaze es todo código sincrono y use el broker de eventos para propagar este comando de forma asíncrona
-        # Revise la clase Despachador de la capa de infraestructura
         ejecutar_commando(comando)
         
         return Response('{}', status=202, mimetype='application/json')

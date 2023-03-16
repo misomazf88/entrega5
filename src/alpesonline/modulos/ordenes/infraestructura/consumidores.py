@@ -20,7 +20,7 @@ from alpesonline.modulos.ordenes.aplicacion.dto import ItinerarioDTO
 def suscribirse_a_eventos(app=None):
     cliente = None
     try:
-        cliente = pulsar.Client(f'pulsar://broker:6650')
+        cliente = pulsar.Client(f'pulsar://localhost:6650')
         consumidor = cliente.subscribe('eventos-orden', consumer_type=_pulsar.ConsumerType.Shared,subscription_name='alpesonline-sub-eventos', schema=AvroSchema(EventoOrdenCreada))
 
         while True:
@@ -44,7 +44,7 @@ def suscribirse_a_eventos(app=None):
 def suscribirse_a_comandos(app=None):
     cliente = None
     try:
-        cliente = pulsar.Client(f'pulsar://broker:6650')
+        cliente = pulsar.Client(f'pulsar://localhost:6650')
         consumidor = cliente.subscribe('comando-crear-orden', consumer_type=_pulsar.ConsumerType.Shared, subscription_name='alpesonline-sub-comando-crear-orden', schema=AvroSchema(ComandoCrearOrden))
 
         while True:

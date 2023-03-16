@@ -26,6 +26,7 @@ class MapeadorOrdenDTOJson(AppMap):
     
     def externo_a_dto(self, externo: dict) -> OrdenDTO:
         orden_dto = OrdenDTO()
+        orden_dto.id_cliente = externo.get('id_usuario')
 
         itinerarios: list[ItinerarioDTO] = list()
         for itin in externo.get('itinerarios', list()):

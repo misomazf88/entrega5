@@ -19,9 +19,9 @@ class EventoConfirmacionLogistica(Record):
     time = Long()
     ingestion = Long(default=time_millis())
     specversion = String(default="v1")
-    type = String(default="EventoPago")
+    type = String(default="EventoConfirmacionLogistica")
     datacontenttype = String()
-    service_name = String(default="pagos.alpesonline")
+    service_name = String(default="logistica.alpesonline")
     confirmacion_revertida = ConfirmacionRevertida
     orden_confirmada = OrdenConfirmada
 

@@ -71,7 +71,6 @@ class CoordinadorOrquestacion(CoordinadorSaga, ABC):
     
     def obtener_paso_dado_un_evento(self, evento: EventoDominio):
         for i, paso in enumerate(pasos):
-            print("POPOPOPOPOPO")
             if not isinstance(paso, Transaccion):
                 continue
 

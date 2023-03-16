@@ -79,22 +79,6 @@ Desde el directorio `src/sidecar` ejecute el siguiente comando.
 python -m grpc_tools.protoc -Iprotos --python_out=./pb2py --pyi_out=./pb2py --grpc_python_out=./pb2py protos/ordenes.proto
 ```
 
-### Crear imagen Docker
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-docker build . -f adaptador.Dockerfile -t alpesonline/adaptador
-```
-
-### Ejecutar contenedora (sin compose)
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-docker run -p 50051:50051 alpesonline/adaptador
-```
-
 ## Microservicio: Inventario
 
 Desde el directorio `src` ejecute el siguiente comando
@@ -108,7 +92,7 @@ uvicorn inventario.main:app --host localhost --port 8001 --reload
 Desde el directorio `src` ejecute el siguiente comando
 
 ```bash
-uvicorn integracion_Logistica.main:app --host localhost --port 8002 --reload
+uvicorn integracion_logistica.main:app --host localhost --port 8002 --reload
 ```
 
 ## BFF: Web

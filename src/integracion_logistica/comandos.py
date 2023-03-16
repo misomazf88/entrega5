@@ -16,7 +16,7 @@ class ComandoConfirmarOrden(Record):
     time = Long()
     ingestion = Long(default=time_millis())
     specversion = String(default="v1")
-    type = String(default="ConfirmarOrden")
+    type = String(default="ComandoConfirmarOrden")
     datacontenttype = String()
     service_name = String(default="logistica.alpesonline")
     data = ConfirmarOrdenPayload
@@ -29,7 +29,7 @@ class ComandoRevertirConfirmacion(Record):
     time = Long()
     ingestion = Long(default=time_millis())
     specversion = String(default="v1")
-    type = String(default="RevertirConfirmacion")
+    type = String(default="ComandoRevertirConfirmacion")
     datacontenttype = String()
     service_name = String(default="logistica.alpesonline")
     data = RevertirConfirmacionPayload

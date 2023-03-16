@@ -22,7 +22,7 @@ def broker_host():
     return os.getenv(PULSAR_ENV, default="localhost")
 
 def consultar_schema_registry(topico: str) -> dict:
-    json_registry = requests.get(f'http://broker:8080/admin/v2/schemas/{topico}/schema').json()
+    json_registry = requests.get(f'http://localhost:8080/admin/v2/schemas/{topico}/schema').json()
     return json.loads(json_registry.get('data',{}))
 
 def obtener_schema_avro_de_diccionario(json_schema: dict) -> AvroSchema:
